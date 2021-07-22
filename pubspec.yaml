@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -40,6 +40,8 @@ dependencies:
   hive: ^2.0.4
   ext_storage: ^1.0.3
   cached_network_image: ^3.0.0
+  flutter_audio_query:
+  audio_manager:
 
 dev_dependencies:
   flutter_test:
@@ -57,9 +59,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - Images/mc_logo.png
+    - Images/music_tone.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
