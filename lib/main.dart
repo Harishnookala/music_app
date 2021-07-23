@@ -1,9 +1,15 @@
+import 'dart:ffi';
+
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 import 'package:music_app/songs.dart';
 import 'package:music_app/widget.dart';
+
+import 'artists.dart';
+import 'generes.dart';
+import 'albums.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,13 +20,15 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
+    this._tabController = TabController(initialIndex: 0, length: 4, vsync: this);
+
     super.initState();
     setupAudio();
   }
-
+  TabController _tabController;
   void setupAudio() {
     audioManagerInstance.onEvents((events, args) {
       switch (events) {
@@ -67,7 +75,16 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         drawer: Drawer(),
         appBar: AppBar(
-          actions: <Widget>[
+
+        bottom: TabBar(
+          controller: this._tabController,
+        tabs: [
+          Tab(child: Text("Music",style: TextStyle(color: Colors.blueAccent),),),
+          Tab(child: Text("Albums",style: TextStyle(color: Colors.blueAccent)),),
+          Tab(child: Text("Artists",style: TextStyle(color: Colors.blueAccent)),),
+          Tab(child: Text("Generes",style: TextStyle(color: Colors.blueAccent)),),
+        ],),
+        actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
@@ -86,7 +103,7 @@ class _MyAppState extends State<MyApp> {
             )
           ],
           elevation: 0,
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.lightGreenAccent,
           title: showVol
               ? Slider(
             value: audioManagerInstance.volume ?? 0,
@@ -96,9 +113,12 @@ class _MyAppState extends State<MyApp> {
               });
             },
           )
-              : Text("Music app demo"),
+              : Text("Music app ",style:TextStyle(color: Colors.deepOrangeAccent)),
         ),
-        body: Column(
+        body: TabBarView(
+          controller: this._tabController,
+         children:[
+          Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
@@ -134,6 +154,11 @@ class _MyAppState extends State<MyApp> {
             ),
             bottomPanel(),
           ],
+        ),
+          Albums(),
+           Artists(),
+           Generes(),
+        ],
         ),
       ),
     );

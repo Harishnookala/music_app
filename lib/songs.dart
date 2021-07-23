@@ -1,107 +1,106 @@
+import 'dart:core';
 import 'dart:io';
-import 'package:music_app/widget.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'widget.dart';
 
 class SongWidget extends StatelessWidget {
   final List<SongInfo> songList;
-
   SongWidget({@required this.songList});
-
+  List albums =[];
   @override
   Widget build(BuildContext context) {
+    find_albums(songList);
+
     return ListView.builder(
-        itemCount: songList.length,
-        itemBuilder: (context, songIndex) {
-          SongInfo song = songList[songIndex];
-          if (song.displayName.contains(".mp3"))
-            return Card(
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+      itemCount: songList.length,
+      itemBuilder: (context, Index) {
+        List<SongInfo> song = songList;
+
+        if (song[Index].displayName.contains(".mp3")) {
+          return Container(
+              margin: EdgeInsets.all(2.3),
+              child: new Card(
                 child: Row(
-                  children: <Widget>[
-                    ClipRRect(
+                  children: [
+                    ClipOval(
                       child: Image(
-                        height: 90,
-                        width: 150,
+                        height: 50,
+                        width: 50,
                         fit: BoxFit.cover,
-                        image: song.albumArtwork!=null?FileImage(File(song.albumArtwork)):AssetImage("Images/music_tone.jpg"),
+                        image: song[Index].albumArtwork!=null?FileImage(File(song[Index].albumArtwork)):AssetImage("Images/music_tone.jpg"),
                       ),
-                      borderRadius: BorderRadius.circular(5),
+
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.47,
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                    Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(top:16.3,left: 16.3,bottom: 16.3),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
+                            children: [
+                              Text(song[Index].title),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Text(song.title,
+                                margin: EdgeInsets.only(top: 4),
+                                child: Text("Artist: ${song[Index].artist}",
                                     style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700)),
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w500)),
                               ),
-                              Text("Release Year: ${song.year}",
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500)),
-                              Text("Artist: ${song.artist}",
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500)),
-                              Text("Composer: ${song.composer}",
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500)),
-                              Text(
-                                  "Duration: ${parseToMinutesSeconds(int.parse(song.duration))} min",
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500)),
+                              Container(
+                                margin: EdgeInsets.only(top: 4),
+                                child: Text("Album: ${song[Index].album}",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 4),
+                                child: Text("Album_Id: ${song[Index].albumId}",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+
                             ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              audioManagerInstance
-                                  .start("file://${song.filePath}", song.title,
-                                  desc: song.displayName,
-                                  auto: true,
-                                  cover: song.albumArtwork)
-                                  .then((err) {
+                        )),
+                    Container(
+                      margin: EdgeInsets.all(16.3),
+                      child: InkWell(
+                        onTap: () {
+                          audioManagerInstance
+                              .start("file://${song[Index].filePath}", song[Index].title,
+                              desc: song[Index].displayName,
+                              auto: true,
+                              cover: song[Index].albumArtwork)
+                              .then((err) {
 
-                              });
-                            },
-                            child: IconText(
-                              iconData: Icons.play_circle_outline,
-                              iconColor: Colors.red,
-                              string: "Play",
-                              textColor: Colors.black,
-                              iconSize: 25,
-                            ),
-                          )
-                        ],
+                          });
+                        },
+                        child: IconText(
+                          iconData: Icons.play_circle_outline,
+                          iconColor: Colors.red,
+                          string: "Play",
+                          textColor: Colors.black,
+                          iconSize: 25,
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
-              ),
-            );
+              ));
 
-          return SizedBox(
-            height: 0,
-          );
-        });
+        } else {
+          return SizedBox();
+        }
+      },
+    );
   }
 
   static String parseToMinutesSeconds(int ms) {
@@ -117,4 +116,38 @@ class SongWidget extends StatelessWidget {
     data += seconds.toString();
     return data;
   }
+
+  List find_albums(List<SongInfo> song) {
+    for (int i = 0;i<song.length;i++){
+      print(song[i].album +song[i].title);
+
+      if(albums.contains(song[i].album)){
+         print("");
+       }
+       else{
+         albums.add(song[i].album);
+       }
+    }
+
+
+
+  }
+
+
+
 }
+
+
+
+
+class Songs{
+  String album_name;
+  String title;
+
+  Songs({this.album_name,this.title});
+}
+
+
+
+
+
