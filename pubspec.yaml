@@ -42,6 +42,12 @@ dependencies:
   cached_network_image: ^3.0.0
   flutter_audio_query:
   audio_manager:
+  just_audio: ^0.8.0
+  audiotagger: ^2.2.1
+  audio_session: ^0.1.5
+  audio_service: ^0.17.1
+  audioplayers: ^0.19.1
+  cache_audio_player: ^1.0.0
 
 dev_dependencies:
   flutter_test:

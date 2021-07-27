@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:music_app/playlist_screen.dart';
 
 class Albumsongs extends StatefulWidget {
   String album_id;
@@ -13,11 +14,15 @@ class Albumsongs extends StatefulWidget {
 }
 
 class AlbumsongsState extends State<Albumsongs> {
+  bool playing = false;
   String album_id;
   String number_of_songs;
   int tracks;
   List<SongInfo>songs;
-  AlbumsongsState({this.album_id,this.number_of_songs});
+  IconData play_button = Icons.play_arrow;
+
+  AlbumsongsState({this.album_id, this.number_of_songs});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +33,12 @@ class AlbumsongsState extends State<Albumsongs> {
               builder: (context, snapshot) {
                 songs = snapshot.data;
                 tracks  = int.parse(number_of_songs);
+
                 return Container(
                   child: ListView.builder(
                       itemCount:tracks ,
                       itemBuilder: (context, Index) {
-                        print(songs[0].albumArtwork);
+                        SongInfo song_item = songs[Index];
 
                         return new Container(
                           child: Column(
@@ -41,9 +47,9 @@ class AlbumsongsState extends State<Albumsongs> {
                               if (Index == 0)
                                 Container(
                                   margin:
-                                      EdgeInsets.only(left: 5.3, right: 5.3),
+                                  EdgeInsets.only(left: 5.3, right: 5.3),
                                   padding:
-                                      EdgeInsets.only(top: 13.3, bottom: 15.3),
+                                  EdgeInsets.only(top: 13.3, bottom: 15.3),
                                   child: Center(
                                     child: ClipOval(
                                       child: (songs[Index].albumArtwork!=null)?Image(
@@ -55,7 +61,7 @@ class AlbumsongsState extends State<Albumsongs> {
                                 Container(),
                               Container(
                                   margin:
-                                      EdgeInsets.only(left: 15.3, bottom: 15.3),
+                                  EdgeInsets.only(left: 15.3, bottom: 15.3),
                                   child: ListTile(
                                     leading: ClipOval(
                                       child: Image(
@@ -64,17 +70,23 @@ class AlbumsongsState extends State<Albumsongs> {
                                           fit: BoxFit.fitWidth,
                                           image: songs[Index].albumArtwork!=null
                                               ? FileImage(File(
-                                                  songs[Index].albumArtwork))
+                                              songs[Index].albumArtwork))
                                               : AssetImage(
-                                                  "Images/music_tone.jpg")),
+                                              "Images/music_tone.jpg")),
                                     ),
                                     title: Text(
-                                      songs[Index].title,
+                                        songs[Index].displayName +
+                                            Index.toString()
                                     ),
                                     onTap: () {
-
-
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Player()));
                                     },
+
+
                                   ))
                             ],
                           ),

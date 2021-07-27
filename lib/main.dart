@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:music_app/songs.dart';
 import 'package:music_app/widget.dart';
 
 import 'artists.dart';
-import 'generes.dart';
 import 'albums.dart';
 
 void main() {
@@ -23,7 +21,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    this._tabController = TabController(initialIndex: 0, length: 4, vsync: this);
+    this._tabController =
+        TabController(initialIndex: 0, length: 3, vsync: this);
 
     super.initState();
     setupAudio();
@@ -82,7 +81,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           Tab(child: Text("Music",style: TextStyle(color: Colors.blueAccent),),),
           Tab(child: Text("Albums",style: TextStyle(color: Colors.blueAccent)),),
           Tab(child: Text("Artists",style: TextStyle(color: Colors.blueAccent)),),
-          Tab(child: Text("Generes",style: TextStyle(color: Colors.blueAccent)),),
         ],),
         actions: <Widget>[
             Padding(
@@ -157,8 +155,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         ),
           Albums(),
            Artists(),
-           Generes(),
-        ],
+
+         ],
         ),
       ),
     );

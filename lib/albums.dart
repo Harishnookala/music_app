@@ -21,7 +21,7 @@ class _AlbumsState extends State<Albums> {
     return Container(
         child: FutureBuilder(
             future: FlutterAudioQuery()
-                .getAlbums(sortType: AlbumSortType.ALPHABETIC_ARTIST_NAME),
+                .getAlbums(sortType: AlbumSortType.CURRENT_IDs_ORDER),
             builder: (context, snapshot) {
               List<AlbumInfo> albums = snapshot.data;
               if (snapshot.hasData) {
