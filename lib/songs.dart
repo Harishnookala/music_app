@@ -64,28 +64,18 @@ class _SongWidgetState extends State<SongWidget> {
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,
-                                          fontWeight: FontWeight.w500)),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 4),
-                                  child: Text("Album: ${song[Index].album}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w500)),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 4),
-                                  child: Text(
-                                      "Album_Id: ${song[Index].albumId}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w500)),
-                                ),
-
-                              ],
+                                      fontWeight: FontWeight.w500)),
                             ),
+                            Container(
+                              margin: EdgeInsets.only(top: 4),
+                              child: Text("Album: ${song[Index].album}",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ],
+                        ),
                           )),
 
                     ],

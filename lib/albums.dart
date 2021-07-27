@@ -27,16 +27,17 @@ class _AlbumsState extends State<Albums> {
               if (snapshot.hasData) {
                 return GridView.builder(
                     itemCount: albums.length,
-                    semanticChildCount: 2,
+                    semanticChildCount: 1,
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 250,
                         childAspectRatio: 4 / 6,
                         mainAxisExtent: 265,
-                        mainAxisSpacing: 10),
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 0.6),
                     itemBuilder: (context, Index) {
                       return InkWell(
-                        highlightColor: Colors.cyanAccent,
                         child: new Card(
+                          color: Colors.blueGrey,
                           elevation: 2.5,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -54,14 +55,17 @@ class _AlbumsState extends State<Albums> {
                                   margin: EdgeInsets.only(top: 5.3, left: 9.6,bottom: 12.3),
                                   child: Text(
                                     albums[Index].title,
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(
+                                        color: Colors.limeAccent, fontSize: 16),
                                   )),
                               Container(
                                 margin: EdgeInsets.only(top: 5.3, left: 9.6),
                                 child: Text(
-                                  albums[Index].artist,
+                                  albums[Index].artist == "<unknown>"
+                                      ? ""
+                                      : albums[Index].artist,
                                   style: TextStyle(
-                                      color: Colors.black54, fontSize: 14),
+                                      color: Colors.orangeAccent, fontSize: 15),
                                 ),
                               ),
 

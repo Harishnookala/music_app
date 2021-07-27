@@ -1,3 +1,4 @@
+import 'dart:ffi';
 
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     super.initState();
     setupAudio();
   }
+
   TabController _tabController;
+
   void setupAudio() {
     audioManagerInstance.onEvents((events, args) {
       switch (events) {
@@ -72,17 +75,27 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        drawer: Drawer(),
         appBar: AppBar(
-
-        bottom: TabBar(
-          controller: this._tabController,
-        tabs: [
-          Tab(child: Text("Music",style: TextStyle(color: Colors.blueAccent),),),
-          Tab(child: Text("Albums",style: TextStyle(color: Colors.blueAccent)),),
-          Tab(child: Text("Artists",style: TextStyle(color: Colors.blueAccent)),),
-        ],),
-        actions: <Widget>[
+          bottom: TabBar(
+            controller: this._tabController,
+            tabs: [
+              Tab(
+                child: Text(
+                  "Music",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+              ),
+              Tab(
+                child:
+                    Text("Albums", style: TextStyle(color: Colors.blueAccent)),
+              ),
+              Tab(
+                child:
+                    Text("Artists", style: TextStyle(color: Colors.blueAccent)),
+              ),
+            ],
+          ),
+          actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
@@ -111,52 +124,58 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               });
             },
           )
-              : Text("Music app ",style:TextStyle(color: Colors.deepOrangeAccent)),
+              : Center(
+
+              child: Text("Music app ",
+                  style: TextStyle(color: Colors.deepOrangeAccent))),
         ),
         body: TabBarView(
           controller: this._tabController,
-         children:[
-          Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Container(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
 
-                child: FutureBuilder(
-                  future: FlutterAudioQuery()
-                      .getSongs(sortType: SongSortType.RECENT_YEAR),
-                  builder: (context, snapshot) {
-                    List<SongInfo> songInfo = snapshot.data;
-                    if (snapshot.hasData) return SongWidget(songList: songInfo);
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            CircularProgressIndicator(),
-                            SizedBox(
-                              width: 20,
+                    child: FutureBuilder(
+                      future: FlutterAudioQuery()
+                          .getSongs(sortType: SongSortType.RECENT_YEAR),
+                      builder: (context, snapshot) {
+                        List<SongInfo> songInfo = snapshot.data;
+                        if (snapshot.hasData)
+                          return SongWidget(songList: songInfo);
+                        return Container(
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.4,
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CircularProgressIndicator(),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  "Loading....",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                            Text(
-                              "Loading....",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                //bottomPanel(),
+              ],
             ),
-            bottomPanel(),
+            Albums(),
+            Artists(),
           ],
-        ),
-          Albums(),
-           Artists(),
-
-         ],
         ),
       ),
     );

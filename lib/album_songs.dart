@@ -8,9 +8,12 @@ import 'package:music_app/playlist_screen.dart';
 class Albumsongs extends StatefulWidget {
   String album_id;
   String number_of_songs;
-  Albumsongs({this.album_id,this.number_of_songs});
+
+  Albumsongs({this.album_id, this.number_of_songs});
+
   @override
-  AlbumsongsState createState() => AlbumsongsState(album_id: album_id,number_of_songs: number_of_songs);
+  AlbumsongsState createState() =>
+      AlbumsongsState(album_id: album_id, number_of_songs: number_of_songs);
 }
 
 class AlbumsongsState extends State<Albumsongs> {
@@ -18,7 +21,8 @@ class AlbumsongsState extends State<Albumsongs> {
   String album_id;
   String number_of_songs;
   int tracks;
-  List<SongInfo>songs;
+  String file;
+  List<SongInfo> songs;
   IconData play_button = Icons.play_arrow;
 
   AlbumsongsState({this.album_id, this.number_of_songs});
@@ -28,15 +32,13 @@ class AlbumsongsState extends State<Albumsongs> {
     return Scaffold(
       body: Container(
           child: FutureBuilder(
-              future: FlutterAudioQuery().getSongsFromAlbum(
-                  albumId: album_id),
+              future: FlutterAudioQuery().getSongsFromAlbum(albumId: album_id),
               builder: (context, snapshot) {
                 songs = snapshot.data;
-                tracks  = int.parse(number_of_songs);
-
+                tracks = int.parse(number_of_songs);
                 return Container(
                   child: ListView.builder(
-                      itemCount:tracks ,
+                      itemCount: tracks,
                       itemBuilder: (context, Index) {
                         SongInfo song_item = songs[Index];
 
@@ -47,13 +49,17 @@ class AlbumsongsState extends State<Albumsongs> {
                               if (Index == 0)
                                 Container(
                                   margin:
-                                  EdgeInsets.only(left: 5.3, right: 5.3),
+                                      EdgeInsets.only(left: 5.3, right: 5.3),
                                   padding:
-                                  EdgeInsets.only(top: 13.3, bottom: 15.3),
+                                      EdgeInsets.only(top: 13.3, bottom: 15.3),
                                   child: Center(
                                     child: ClipOval(
-                                      child: (songs[Index].albumArtwork!=null)?Image(
-                                          image: FileImage(File(songs[Index].albumArtwork))):Image.asset("Images/music_tone.jpg"),
+                                      child: (songs[Index].albumArtwork != null)
+                                          ? Image(
+                                              image: FileImage(File(
+                                                  songs[Index].albumArtwork)))
+                                          : Image.asset(
+                                              "Images/music_tone.jpg"),
                                     ),
                                   ),
                                 )
@@ -68,25 +74,28 @@ class AlbumsongsState extends State<Albumsongs> {
                                           height: 60,
                                           width: 60,
                                           fit: BoxFit.fitWidth,
-                                          image: songs[Index].albumArtwork!=null
+                                          image: songs[Index].albumArtwork !=
+                                              null
                                               ? FileImage(File(
                                               songs[Index].albumArtwork))
                                               : AssetImage(
                                               "Images/music_tone.jpg")),
                                     ),
-                                    title: Text(
-                                        songs[Index].displayName +
-                                            Index.toString()
-                                    ),
+                                    title: Text(songs[Index].displayName),
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
+                                      print(songs[Index].filePath);
+                                      Navigator.push(context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Player()));
+                                                  Player(
+                                                      index_of_song: Index,
+                                                      songs: songs,
+                                                      file: songs[Index]
+                                                          .filePath,
+                                                      number_of_songs: number_of_songs)
+                                          )
+                                      );
                                     },
-
-
                                   ))
                             ],
                           ),
