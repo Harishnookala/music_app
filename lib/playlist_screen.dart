@@ -153,10 +153,7 @@ class _PlayerState extends State<Player> {
                                               widget.index_of_song = index;
                                               widget.file =
                                                   widget.songs[index].filePath;
-                                              /*  Navigator.pushReplacement(
-                                                 context,
-                                                 MaterialPageRoute(
-                                                     builder: (BuildContext context) => super.widget));*/
+                                              _player.play(widget.file);
                                             });
                                           },
                                         )),
