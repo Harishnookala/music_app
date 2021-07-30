@@ -18,13 +18,13 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-  bool playing = true;
-  IconData play_button = Icons.pause;
+  bool playing = false;
   AudioPlayer _player;
   AudioCache _cache;
   String file;
   Duration position = new Duration();
   Duration music_length = new Duration();
+  IconData play_button = Icons.pause;
 
   Widget slider() {
     return Slider.adaptive(
@@ -39,6 +39,7 @@ class _PlayerState extends State<Player> {
 
   void seektoSec(int value) {
     Duration newPos = Duration(seconds: value);
+
     _player.seek(newPos);
   }
 
@@ -46,15 +47,25 @@ class _PlayerState extends State<Player> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _player = AudioPlayer();
     _cache = AudioCache(fixedPlayer: _player);
-    _player.play(widget.file);
+    _player = AudioPlayer();
+
+    _player.durationHandler = (d) {
+      setState(() {
+        music_length = d;
+      });
+    };
+    _player.positionHandler = (p) {
+      setState(() {
+        position = p;
+      });
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     int tracks = int.parse(widget.number_of_songs);
-    print(widget.index_of_song);
+
     return Scaffold(
       body: Container(
         margin: EdgeInsets.all(15.3),
@@ -68,74 +79,45 @@ class _PlayerState extends State<Player> {
                   children: [
                     Column(
                       children: [
-                        if (index == 0)
-                          Container(
-                            margin: EdgeInsets.only(left: 5.3, right: 5.3),
-                            padding: EdgeInsets.only(top: 13.3, bottom: 15.3),
-                            child: Center(
-                              child: ClipRect(
-                                clipBehavior: Clip.hardEdge,
-                                child: (display_songs.albumArtwork != null)
-                                    ? Image(
-                                        image: FileImage(
-                                            File(display_songs.albumArtwork)))
-                                    : Image.asset("Images/music_tone.jpg"),
-                              ),
+                        (index == 0) ?
+                        Container(
+                          margin: EdgeInsets.only(left: 5.3, right: 5.3),
+                          padding: EdgeInsets.only(top: 13.3, bottom: 15.3),
+                          child: Center(
+                            child: ClipRect(
+                              clipBehavior: Clip.hardEdge,
+                              child: (display_songs.albumArtwork != null)
+                                  ? Image(
+                                  image: FileImage(
+                                      File(display_songs.albumArtwork)))
+                                  : Image.asset("Images/music_tone.jpg"),
                             ),
-                          )
-                        else
-                          Container(),
-                        (index == 0)
-                            ? Center(
-                                child: Text(widget
-                                    .songs[widget.index_of_song].displayName),
-                              )
+                          ),
+                        )
                             : Container(),
+                        (index == 0) ? Container(
+                          child: Text(widget.songs[widget.index_of_song]
+                              .displayName, style: TextStyle(
+                              fontSize: 16, color: Colors.cyan),),
+                        ) : Container(),
+
+                        (index == 0) ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("${position.inMinutes}:${position.inSeconds
+                                .remainder(60)}",
+                              style: TextStyle(fontSize: 16),),
+                            slider(),
+                            Text("${music_length.inMinutes}:${music_length
+                                .inSeconds.remainder(60)}",
+                                style: TextStyle(fontSize: 16)),
+                          ],
+                        ) : Container(),
+
                         (index == 0)
-                            ? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.skip_previous_outlined,
-                                      color: Colors.blue,
-                                      size: 45,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  TextButton(
-                                    child: Icon(
-                                      play_button,
-                                      color: Colors.green,
-                                      size: 35,
-                                    ),
-                                    onPressed: () {
-                                      if (playing) {
-                                        setState(() {
-                                          play_button = Icons.play_arrow;
-                                          playing = false;
-                                        });
-                                      } else {
-                                        _player.pause();
-                                        setState(() {
-                                          play_button = Icons.pause;
-                                          playing = true;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.skip_next_outlined,
-                                      color: Colors.blue,
-                                      size: 35,
-                                    ),
-                                    onTap: () {},
-                                  )
-                                ],
-                              )
+                            ? build_play_widget()
                             : Container(),
+
                         Container(
                           margin: EdgeInsets.all(12.3),
                           // decoration: BoxDecoration(border: Border.all(color: Colors.deepOrangeAccent)),
@@ -153,17 +135,30 @@ class _PlayerState extends State<Player> {
                                               image: FileImage(File(
                                                   display_songs.albumArtwork)))
                                           : Image.asset(
-                                              "Images/music_tone.jpg"),
+                                          "Images/music_tone.jpg"),
                                     ),
                                     Container(
                                         width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width *
+                                            0.7,
                                         //margin: EdgeInsets.all(12.3),
                                         child: ListTile(
                                           title: Text(
                                               widget.songs[index].displayName),
-                                          onTap: () {},
+                                          onTap: () {
+                                            setState(() {
+                                              widget.index_of_song = index;
+                                              widget.file =
+                                                  widget.songs[index].filePath;
+                                              /*  Navigator.pushReplacement(
+                                                 context,
+                                                 MaterialPageRoute(
+                                                     builder: (BuildContext context) => super.widget));*/
+                                            });
+                                          },
                                         )),
                                   ],
                                 ),
@@ -178,6 +173,54 @@ class _PlayerState extends State<Player> {
               );
             }),
       ),
+    );
+  }
+
+  build_play_widget() {
+    _player.play(widget.file);
+    return Row(
+      mainAxisAlignment:
+      MainAxisAlignment.spaceEvenly,
+      children: [
+        InkWell(
+          child: Icon(
+            Icons.skip_previous_outlined,
+            color: Colors.blue,
+            size: 45,
+          ),
+          onTap: () {},
+        ),
+        TextButton(
+          child: Icon(
+            play_button,
+            color: Colors.green,
+            size: 35,
+          ),
+          onPressed: () {
+            if (playing) {
+              _player.play(widget.file);
+              setState(() {
+                play_button = Icons.pause;
+                playing = false;
+              });
+            } else {
+              _player.stop();
+              setState(() {
+                play_button = Icons.play_arrow;
+                playing = true;
+              });
+            }
+          },
+        ),
+        InkWell(
+          child: Icon(
+            Icons.skip_next_outlined,
+            color: Colors.blue,
+            size: 35,
+          ),
+          onTap: () {},
+        )
+      ],
     );
   }
 }

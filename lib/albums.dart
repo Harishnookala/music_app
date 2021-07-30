@@ -56,7 +56,9 @@ class _AlbumsState extends State<Albums> {
                                   child: Text(
                                     albums[Index].title,
                                     style: TextStyle(
-                                        color: Colors.limeAccent, fontSize: 16),
+                                        color: Colors.limeAccent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15),
                                   )),
                               Container(
                                 margin: EdgeInsets.only(top: 5.3, left: 9.6),
@@ -65,7 +67,9 @@ class _AlbumsState extends State<Albums> {
                                       ? ""
                                       : albums[Index].artist,
                                   style: TextStyle(
-                                      color: Colors.orangeAccent, fontSize: 15),
+                                      color: Colors.orangeAccent,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15),
                                 ),
                               ),
 

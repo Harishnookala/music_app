@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:music_app/playlist_screen.dart';
 
 import 'package:music_app/songs.dart';
 import 'package:music_app/widget.dart';
@@ -175,6 +176,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             ),
             Albums(),
             Artists(),
+
           ],
         ),
       ),
