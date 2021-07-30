@@ -79,45 +79,49 @@ class _PlayerState extends State<Player> {
                   children: [
                     Column(
                       children: [
-                        (index == 0) ?
-                        Container(
-                          margin: EdgeInsets.only(left: 5.3, right: 5.3),
-                          padding: EdgeInsets.only(top: 13.3, bottom: 15.3),
-                          child: Center(
-                            child: ClipRect(
-                              clipBehavior: Clip.hardEdge,
-                              child: (display_songs.albumArtwork != null)
-                                  ? Image(
-                                  image: FileImage(
-                                      File(display_songs.albumArtwork)))
-                                  : Image.asset("Images/music_tone.jpg"),
-                            ),
-                          ),
-                        )
-                            : Container(),
-                        (index == 0) ? Container(
-                          child: Text(widget.songs[widget.index_of_song]
-                              .displayName, style: TextStyle(
-                              fontSize: 16, color: Colors.cyan),),
-                        ) : Container(),
-
-                        (index == 0) ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("${position.inMinutes}:${position.inSeconds
-                                .remainder(60)}",
-                              style: TextStyle(fontSize: 16),),
-                            slider(),
-                            Text("${music_length.inMinutes}:${music_length
-                                .inSeconds.remainder(60)}",
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ) : Container(),
-
                         (index == 0)
-                            ? build_play_widget()
+                            ? Container(
+                                margin: EdgeInsets.only(left: 5.3, right: 5.3),
+                                padding:
+                                    EdgeInsets.only(top: 13.3, bottom: 15.3),
+                                child: Center(
+                                  child: ClipRect(
+                                    clipBehavior: Clip.hardEdge,
+                                    child: (display_songs.albumArtwork != null)
+                                        ? Image(
+                                            image: FileImage(File(
+                                                display_songs.albumArtwork)))
+                                        : Image.asset("Images/music_tone.jpg"),
+                                  ),
+                                ),
+                              )
                             : Container(),
-
+                        (index == 0)
+                            ? Container(
+                                child: Text(
+                                  widget
+                                      .songs[widget.index_of_song].displayName,
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.cyan),
+                                ),
+                              )
+                            : Container(),
+                        (index == 0)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${position.inMinutes}:${position.inSeconds.remainder(60)}",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  slider(),
+                                  Text(
+                                      "${music_length.inMinutes}:${music_length.inSeconds.remainder(60)}",
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              )
+                            : Container(),
+                        (index == 0) ? build_play_widget() : Container(),
                         Container(
                           margin: EdgeInsets.all(12.3),
                           // decoration: BoxDecoration(border: Border.all(color: Colors.deepOrangeAccent)),
@@ -135,7 +139,7 @@ class _PlayerState extends State<Player> {
                                               image: FileImage(File(
                                                   display_songs.albumArtwork)))
                                           : Image.asset(
-                                          "Images/music_tone.jpg"),
+                                              "Images/music_tone.jpg"),
                                     ),
                                     Container(
                                         width:
@@ -153,8 +157,8 @@ class _PlayerState extends State<Player> {
                                               widget.index_of_song = index;
                                               widget.file =
                                                   widget.songs[index].filePath;
-                                              _player.play(widget.file);
                                             });
+                                            _player.play(widget.file);
                                           },
                                         )),
                                   ],
@@ -176,8 +180,7 @@ class _PlayerState extends State<Player> {
   build_play_widget() {
     _player.play(widget.file);
     return Row(
-      mainAxisAlignment:
-      MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         InkWell(
           child: Icon(
